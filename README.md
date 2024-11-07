@@ -119,7 +119,7 @@ To use the full functionality of this application, you must create a `secrets.to
 3. Add the following content to `secrets.toml`:
    ```toml
    [admin]
-   password = "123456"
+   password = "YourPasswordHere"
 
    [api_keys]
    openai_api_key = "YOUR_OPENAI_API_KEY"
