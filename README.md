@@ -1,3 +1,4 @@
+
 # **ML-Enhanced Portfolio Risk Analyzer**
 ### **End-to-End Data Science Project**
 
@@ -79,17 +80,34 @@ This application addresses:
 
 ---
 
-## **How to Use**
-1. Clone the repository:
+You're absolutely correct—those sections are indeed repetitive. To improve clarity and conciseness, we can consolidate the instructions about setting up secrets and API keys into a single section, while ensuring all the necessary details are covered.
+
+Here’s a revised version of the **How to Use** section to eliminate redundancy:
+
+---
+
+### How to Use
+
+1. **Clone the Repository**  
+   Clone this repository to your local machine:
    ```bash
-   git clone https://github.com/your-repo-url](https://github.com/senlerk/ML-Enhanced-Portfolio-Risk-Analyzer
+   git clone https://github.com/senlerk/ML-Enhanced-Portfolio-Risk-Analyzer
+   cd ML-Enhanced-Portfolio-Risk-Analyzer
    ```
-2. Install dependencies:
+
+2. **Install Dependencies**  
+   Install the required Python libraries:
    ```bash
    pip install -r requirements.txt
    ```
-3. **Set Up Secrets and API Keys**:
-   - Create a `.streamlit/secrets.toml` file in the project directory. The file should look like this:
+
+3. **Set Up Secrets and API Keys**  
+   To enable the full functionality of this app, you need to create a `.streamlit/secrets.toml` file. This file will store sensitive credentials securely.  
+   
+   **Steps to Set Up**:  
+   - Navigate to the `.streamlit` directory (create it if it doesn't exist).  
+   - Create a new file named `secrets.toml`.  
+   - Add the following content:
      ```toml
      [admin]
      password = "your_admin_password"
@@ -98,53 +116,30 @@ This application addresses:
      openai_api_key = "your_openai_api_key"
      fred_api_key = "your_fred_api_key"
      ```
-   - Replace `your_admin_password`, `your_openai_api_key`, and `your_fred_api_key` with actual values.
+   - Replace `your_admin_password`, `your_openai_api_key`, and `your_fred_api_key` with your actual credentials.  
 
-4. Run the application:
+   **Explanation**:
+   - `admin.password`: Used to secure the Admin Dashboard.
+   - `api_keys.openai_api_key`: Required for the OpenAI-powered AI assistant.
+   - `api_keys.fred_api_key`: Required to fetch economic indicators from the FRED API.  
+
+   ⚠️ **Important**: Keep this file secure. Do not upload it to any public repository. Add it to your `.gitignore` file:
+   ```bash
+   echo ".streamlit/secrets.toml" >> .gitignore
+   ```
+
+4. **Run the Application**  
+   Launch the Streamlit app:
    ```bash
    streamlit run app.py
    ```
-5. Navigate to different sections:
-   - **Portfolio Risk Analyzer**: Assess portfolio risk and visualize metrics.
-   - **AI Portfolio Assistant**: Chat with the AI for investment advice.
-   - **Voice AI Assistant**: Interact using voice commands for financial queries.
-   - **Admin Dashboard**: Manage datasets and retrain models.
 
----
-
-## **Setting Up Secrets and API Keys**
-To use the full functionality of this application, you must create a `secrets.toml` file. Follow these steps:
-1. Navigate to the `.streamlit` directory (create it if it doesn't exist).
-2. Create a new file called `secrets.toml`.
-3. Add the following content to `secrets.toml`:
-   ```toml
-   [admin]
-   password = "YourPasswordHere"
-
-   [api_keys]
-   openai_api_key = "YOUR_OPENAI_API_KEY"
-   fred_api_key = "YOUR_FRED_API_KEY"
-   ```
-4. **Explanation**:
-   - `admin.password`: Used to secure the **Admin Dashboard**.
-   - `api_keys.openai_api_key`: Required for the OpenAI-powered AI assistant.
-   - `api_keys.fred_api_key`: Required to fetch economic indicators from the FRED API.
-
-5. **Keep this file secure!** Never upload it to GitHub or any public repository.
-
----
-
-## **Data Sources and Integration**
-### Data Sources:
-1. **Stock Data**: Historical S&P 500 data fetched using the YFinance API.
-2. **Economic Indicators**: Data from the Federal Reserve Economic Data (FRED) API, including:
-   - Consumer Sentiment Index
-   - VIX (Volatility Index)
-   - Treasury Yields
-
-### Integration:
-- Data from both sources are merged using common `Date` and `Ticker` fields.
-- Additional features such as moving averages, rolling volatility, and lagged variables are calculated for model training.
+5. **Navigate the Application**  
+   Use the sidebar to access different sections of the application:  
+   - **Portfolio Risk Analyzer**: Assess portfolio risk and visualize key metrics.  
+   - **AI Portfolio Assistant**: Chat with an AI-powered assistant for personalized investment advice.  
+   - **Voice AI Assistant**: Use voice commands to interact with the app.  
+   - **Admin Dashboard**: Manage datasets, retrain models, and perform administrative tasks.  
 
 ---
 
