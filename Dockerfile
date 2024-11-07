@@ -17,7 +17,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
 # Copy the application files and model files
-COPY v4.py .
+COPY app.py .
 COPY random_forest_model.pkl .
 COPY scaler.pkl .
 COPY model_features.txt .
