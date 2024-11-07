@@ -33,11 +33,10 @@ from tqdm import tqdm
 from audio_recorder_streamlit import audio_recorder
 from gtts import gTTS
 
-
-
 # Add this with your other session state initializations
 if 'messages' not in st.session_state:
     st.session_state.messages = []
+
 # Set page configuration
 st.set_page_config(
     page_title="ML-Enhanced Portfolio App",
@@ -52,21 +51,22 @@ if 'data_merging_complete' not in st.session_state:
     st.session_state.data_merging_complete = False
 
 
+# Fetch API keys from secrets
+OPENAI_API_KEY = st.secrets["api_keys"]["openai_api_key"]
+FRED_API_KEY = st.secrets["api_keys"]["fred_api_key"]
+ADMIN_PASSWORD = st.secrets["admin"]["password"]
+
+
 def voice_ai_assistant():
     st.title("🎙️ Voice-Activated AI Portfolio Assistant")
-    
+
     # Initialize session state variables
     if 'voice_messages' not in st.session_state:
         st.session_state.voice_messages = []
 
-    # API Key input
-    api_key = st.sidebar.text_input("Enter your OpenAI API Key", type="password")
-    if not api_key:
-        st.warning("Please enter your OpenAI API key in the sidebar to continue.")
-        return
-
+    # Use the API key from secrets
     try:
-        client = OpenAI(api_key=api_key)
+        client = OpenAI(api_key=OPENAI_API_KEY)
     except Exception as e:
         st.error(f"Error initializing OpenAI client: {str(e)}")
         return
@@ -113,14 +113,14 @@ def voice_ai_assistant():
 
                 transcribed_text = transcription.text
                 st.success(f"🎯 Transcribed: {transcribed_text}")
-                
+
                 # Add user message to chat history
                 st.session_state.voice_messages.append({
                     "role": "user",
                     "content": transcribed_text,
                     "type": "voice"
                 })
-                
+
                 # Get AI response
                 st.info("🤖 Getting AI response...")
                 response = client.chat.completions.create(
@@ -138,23 +138,23 @@ def voice_ai_assistant():
                         }
                     ]
                 )
-                
+
                 ai_response = response.choices[0].message.content
-                
+
                 # Add AI response to chat history
                 st.session_state.voice_messages.append({
                     "role": "assistant",
                     "content": ai_response,
                     "type": "voice"
                 })
-                
+
                 # Convert to speech
                 st.info("🔊 Converting response to speech...")
                 tts = gTTS(text=ai_response, lang='en')
                 audio_fp = BytesIO()
                 tts.write_to_fp(audio_fp)
                 st.audio(audio_fp.getvalue(), format='audio/mp3')
-                
+
             except Exception as e:
                 st.error(f"Error processing audio: {str(e)}")
                 st.error("Please try recording again")
@@ -194,29 +194,19 @@ def voice_ai_assistant():
         """)
 
 
-# Main function remains the same
-
-#ai financial advisor
 def ai_portfolio_assistant():
     st.title("🤖 AI Portfolio Assistant")
-    
-    # API Key input
-    api_key = st.sidebar.text_input("Enter your OpenAI API Key", type="password")
-    
-    if not api_key:
-        st.warning("Please enter your OpenAI API key in the sidebar to continue.")
-        return
-    
+
+    # Use the API key from secrets
     try:
-        # Initialize OpenAI client
-        client = OpenAI(api_key=api_key)
-        
+        client = OpenAI(api_key=OPENAI_API_KEY)
+
         # Initialize chat interface
         st.markdown("""
         ### Chat with your AI Financial Advisor
         Get personalized portfolio advice, market insights, and answers to your financial questions.
         """)
-        
+
         # Initialize message history if empty
         if len(st.session_state.messages) == 0:
             system_msg = {
@@ -224,7 +214,7 @@ def ai_portfolio_assistant():
                 "content": """You are an AI financial advisor designed to assist users with portfolio management, financial planning, and investment strategies. Provide accurate, concise, and insightful advice based on user input. Use plain language to explain complex financial concepts, and ensure all recommendations comply with best financial practices. Always prioritize risk management, long-term growth, and diversification in your suggestions. When unsure, recommend consulting a licensed financial advisor."""
             }
             st.session_state.messages.append(system_msg)
-            
+
             # Add welcome message
             welcome_msg = {
                 "role": "assistant",
@@ -238,45 +228,45 @@ def ai_portfolio_assistant():
 What would you like to discuss today?"""
             }
             st.session_state.messages.append(welcome_msg)
-        
+
         # Display chat history
         for message in st.session_state.messages[1:]:  # Skip system message
             with st.chat_message(message["role"]):
                 st.markdown(message["content"])
-        
+
         # Chat input
         if prompt := st.chat_input("Ask your financial question..."):
             # Add user message to history
             st.session_state.messages.append({"role": "user", "content": prompt})
-            
+
             # Display user message
             with st.chat_message("user"):
                 st.markdown(prompt)
-            
+
             # Get AI response
             with st.chat_message("assistant"):
                 message_placeholder = st.empty()
                 full_response = ""
-                
+
                 try:
                     response = client.chat.completions.create(
                         model="gpt-4",  # Using GPT-4 for better financial advice
-                        messages=[{"role": m["role"], "content": m["content"]} 
-                                for m in st.session_state.messages],
+                        messages=[{"role": m["role"], "content": m["content"]}
+                                  for m in st.session_state.messages],
                         stream=True
                     )
-                    
+
                     # Stream the response
                     for chunk in response:
                         if chunk.choices[0].delta.content is not None:
                             full_response += chunk.choices[0].delta.content
                             message_placeholder.markdown(full_response + "▌")
-                    
+
                     message_placeholder.markdown(full_response)
-                    
+
                     # Add assistant response to history
                     st.session_state.messages.append({"role": "assistant", "content": full_response})
-                    
+
                 except Exception as e:
                     st.error(f"Error: {str(e)}")
                     if "Rate limit" in str(e):
@@ -285,11 +275,14 @@ What would you like to discuss today?"""
                         st.warning("Invalid API key. Please check your OpenAI API key and try again.")
                     else:
                         st.warning("An error occurred. Please try again later.")
-    
+
     except Exception as e:
         st.error(f"Error initializing OpenAI client: {str(e)}")
 
-# ------------------ Portfolio Model Admin Dashboard Functions ------------------
+# Admin Dashboard Updates
+# Use `FRED_API_KEY` where needed for FRED data fetching.
+
+# The rest of the functions will remain unchanged except for the use of these API keys internally where applicable.
 
 def get_sp500_tickers():
     """Fetch S&P 500 tickers from Wikipedia."""
@@ -452,7 +445,7 @@ def train_model(df):
 
 def portfolio_model_admin_dashboard():
     st.title("🛠️ Portfolio Model Admin Dashboard")
-    
+
     # Password protection
     if 'admin_authenticated' not in st.session_state:
         st.session_state.admin_authenticated = False
@@ -461,47 +454,51 @@ def portfolio_model_admin_dashboard():
         st.subheader("🔒 Admin Login")
         password = st.text_input("Enter admin password", type="password")
         if st.button("Login"):
-            if password == st.secrets["admin"]["password"]:
+            if password == ADMIN_PASSWORD:
                 st.session_state.admin_authenticated = True
                 st.success("Logged in successfully!")
             else:
                 st.error("Incorrect password.")
         return  # Stop execution until authenticated
 
+    # Use FRED API Key from secrets
+    fred_api_key = FRED_API_KEY
+
     st.sidebar.header("Settings")
-    fred_api_key = st.sidebar.text_input("Enter FRED API Key", type="password")
     tabs = st.tabs(["Data Gathering", "Data Merging", "Model Training"])
-    
+
     with tabs[0]:
         st.header("Step 1: Data Gathering")
         start_date = st.date_input("Start Date", dt.datetime(2022, 1, 1))
         end_date = st.date_input("End Date", dt.datetime.today())
         num_stocks = st.slider("Number of S&P 500 stocks", 10, 100, 50, 10)
         if st.button("Start Data Gathering"):
-            if not fred_api_key:
-                st.error("Please enter your FRED API key")
-                return
             try:
                 tickers = get_sp500_tickers()[:num_stocks] + ['GLD', 'SLV']
                 stock_progress = st.progress(0)
                 fred_progress = st.progress(0)
+                
+                # Fetch stock data
                 stock_data = fetch_stock_data(tickers, start_date, end_date, stock_progress)
                 if not stock_data.empty:
                     stock_data.to_csv('sp500_data.csv', index=False)
                 else:
                     st.error("Stock data is empty. Data gathering aborted.")
                     return
+                
+                # Fetch FRED data
                 fred_data = fetch_fred_data(fred_api_key, start_date, end_date, fred_progress)
                 if not fred_data.empty:
                     fred_data.to_csv('fred_data.csv', index=False)
                 else:
                     st.error("FRED data is empty. Data gathering aborted.")
                     return
+                
                 st.session_state.data_gathering_complete = True
                 st.success("Data gathering completed!")
             except Exception as e:
                 st.error(f"Error during data gathering: {e}")
-    
+
     with tabs[1]:
         st.header("Step 2: Data Merging")
         if st.button("Start Data Merging"):
@@ -515,7 +512,7 @@ def portfolio_model_admin_dashboard():
                 st.success("Data merging completed!")
             except Exception as e:
                 st.error(f"Error during data merging: {e}")
-    
+
     with tabs[2]:
         st.header("Step 3: Model Training")
         if st.button("Start Model Training"):
@@ -524,6 +521,7 @@ def portfolio_model_admin_dashboard():
                 train_model(df)
             except Exception as e:
                 st.error(f"Error during model training: {e}")
+
 
 # ------------------ Portfolio Risk Analyzer Functions ------------------
 
