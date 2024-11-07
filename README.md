@@ -43,7 +43,7 @@ The **ML-Enhanced Portfolio Risk Analyzer** is a robust tool designed for portfo
 ## **Setup and Installation**
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-repo-url](https://github.com/senlerk/ML-Enhanced-Portfolio-Risk-Analyzer
+git clone https://github.com/senlerk/ML-Enhanced-Portfolio-Risk-Analyzer
 cd ML-Enhanced-Portfolio-Risk-Analyzer
 ```
 
