@@ -1,4 +1,3 @@
-
 # **ML-Enhanced Portfolio Risk Analyzer**
 ### **End-to-End Data Science Project**
 
@@ -8,15 +7,16 @@
 3. [Features](#features)
 4. [Technical Details](#technical-details)
 5. [How to Use](#how-to-use)
-6. [Data Sources and Integration](#data-sources-and-integration)
-7. [Data Cleaning and Preparation](#data-cleaning-and-preparation)
-8. [Exploratory Data Analysis (EDA)](#exploratory-data-analysis-eda)
-9. [Model Building and Evaluation](#model-building-and-evaluation)
-10. [Advanced Features](#advanced-features)
-11. [Assumptions and Limitations](#assumptions-and-limitations)
-12. [Deployment](#deployment)
-13. [Key Achievements](#key-achievements)
-14. [Future Enhancements](#future-enhancements)
+6. [Setting Up Secrets and API Keys](#setting-up-secrets-and-api-keys)
+7. [Data Sources and Integration](#data-sources-and-integration)
+8. [Data Cleaning and Preparation](#data-cleaning-and-preparation)
+9. [Exploratory Data Analysis (EDA)](#exploratory-data-analysis-eda)
+10. [Model Building and Evaluation](#model-building-and-evaluation)
+11. [Advanced Features](#advanced-features)
+12. [Assumptions and Limitations](#assumptions-and-limitations)
+13. [Deployment](#deployment)
+14. [Key Achievements](#key-achievements)
+15. [Future Enhancements](#future-enhancements)
 
 ---
 
@@ -82,21 +82,55 @@ This application addresses:
 ## **How to Use**
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo-url
+   git clone https://github.com/your-repo-url](https://github.com/senlerk/ML-Enhanced-Portfolio-Risk-Analyzer
    ```
 2. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
-3. Run the application:
+3. **Set Up Secrets and API Keys**:
+   - Create a `.streamlit/secrets.toml` file in the project directory. The file should look like this:
+     ```toml
+     [admin]
+     password = "your_admin_password"
+
+     [api_keys]
+     openai_api_key = "your_openai_api_key"
+     fred_api_key = "your_fred_api_key"
+     ```
+   - Replace `your_admin_password`, `your_openai_api_key`, and `your_fred_api_key` with actual values.
+
+4. Run the application:
    ```bash
    streamlit run app.py
    ```
-4. Navigate to different sections:
+5. Navigate to different sections:
    - **Portfolio Risk Analyzer**: Assess portfolio risk and visualize metrics.
    - **AI Portfolio Assistant**: Chat with the AI for investment advice.
    - **Voice AI Assistant**: Interact using voice commands for financial queries.
    - **Admin Dashboard**: Manage datasets and retrain models.
+
+---
+
+## **Setting Up Secrets and API Keys**
+To use the full functionality of this application, you must create a `secrets.toml` file. Follow these steps:
+1. Navigate to the `.streamlit` directory (create it if it doesn't exist).
+2. Create a new file called `secrets.toml`.
+3. Add the following content to `secrets.toml`:
+   ```toml
+   [admin]
+   password = "123456"
+
+   [api_keys]
+   openai_api_key = "YOUR_OPENAI_API_KEY"
+   fred_api_key = "YOUR_FRED_API_KEY"
+   ```
+4. **Explanation**:
+   - `admin.password`: Used to secure the **Admin Dashboard**.
+   - `api_keys.openai_api_key`: Required for the OpenAI-powered AI assistant.
+   - `api_keys.fred_api_key`: Required to fetch economic indicators from the FRED API.
+
+5. **Keep this file secure!** Never upload it to GitHub or any public repository.
 
 ---
 
@@ -111,45 +145,6 @@ This application addresses:
 ### Integration:
 - Data from both sources are merged using common `Date` and `Ticker` fields.
 - Additional features such as moving averages, rolling volatility, and lagged variables are calculated for model training.
-
----
-
-## **Data Cleaning and Preparation**
-### Steps Taken:
-1. **Missing Data Handling**:
-   - Forward and backward filling of missing values.
-   - Removal of stocks with insufficient data points.
-2. **Outlier Treatment**:
-   - Winsorization for extreme values.
-3. **Feature Engineering**:
-   - Creation of technical indicators (moving averages, price ranges, etc.).
-   - Calculation of rolling volatility and percentile values.
-
----
-
-## **Exploratory Data Analysis (EDA)**
-### Tools Used:
-- **Tableau Dashboard**:
-   - Insights into dataset characteristics and distributions.
-   - Visual representation of time-series data for stock prices and economic indicators.
-- **Python Visualizations**:
-   - Heatmaps for correlation analysis.
-   - Line charts for historical price performance.
-
----
-
-## **Model Building and Evaluation**
-### Models:
-1. **Random Forest Regressor**: Used for predicting future volatility.
-   - Features: Moving averages, volatility metrics, macroeconomic indicators.
-2. **Other Considered Models**: Support Vector Machines (SVM), Gradient Boosting.
-
-### Evaluation Metrics:
-- Root Mean Square Error (RMSE)
-- R² Score
-
-### Feature Importance:
-- Importance of features such as VIX, Treasury Yields, and historical volatility visualized to explain the model’s decision-making.
 
 ---
 
@@ -171,54 +166,12 @@ This application addresses:
 
 ---
 
-## **Assumptions and Limitations**
-### Assumptions:
-- All economic indicators are relevant for stock market performance.
-- Predicted volatility follows similar historical patterns.
-
-### Limitations:
-- Limited to available data; potential gaps in emerging markets.
-- Predictions assume no abrupt changes in market conditions.
-
----
-
 ## **Deployment**
 - **Local Deployment**:
    - Run using Streamlit on a local machine.
 - **Cloud Deployment**:
    - Docker container is compatible with cloud platforms like Google Cloud.
    - Model retraining and dataset updates can be managed via the admin dashboard.
-
----
-
-## **Key Achievements**
-1. **Mandatory Deliverables**:
-   - **Dataset Integration**: Combined S&P 500 data with FRED economic indicators.
-   - **Comprehensive Documentation**: This README serves as a guide for the project.
-   - **EDA**: Conducted and visualized using Python and Tableau.
-   - **Model Building**: Random Forest and hyperparameter tuning completed.
-   - **Final Model**: Justified with evaluation metrics and predictions.
-
-2. **Nice-to-Have Additions**:
-   - Voice AI Assistant
-   - Deployment via Docker
-   - Portfolio optimization using predicted metrics
-
-3. **Advanced Data Processing**:
-   - Sophisticated handling of missing data and outliers.
-   - Feature engineering for enhanced model performance.
-
-4. **Code Quality**:
-   - Modular structure.
-   - Well-commented codebase.
-
----
-
-## **Future Enhancements**
-1. Add sentiment analysis using real-time news or social media data.
-2. Enhance portfolio optimization with deep learning models.
-3. Automate model retraining on new data uploads.
-4. Expand to global stocks and economic indicators.
 
 ---
 
